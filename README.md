@@ -2,7 +2,7 @@
 
 
 An end-to-end machine learning web application for credit risk classification.
-It predicts the likelihood of a borrower defaulting on a loan using supervised learning and includes full MLOps capabilities: model training, deployment (Docker + Heroku), CI/CD (GitHub Actions), and automated monitoring/retraining.
+It predicts the likelihood of a borrower defaulting on a loan using supervised learning and includes full MLOps capabilities, including model training, deployment (using Docker and Heroku), CI/CD (GitHub Actions), and automated monitoring/retraining.
 
 ## Features
 
@@ -25,7 +25,7 @@ It predicts the likelihood of a borrower defaulting on a loan using supervised l
 - MLflow (Optional: Model registry)
 
 ## Project Structure
-
+```
 credit-risk-mlops/
 |
 ├── notebooks/              # EDA and prototyping notebooks
@@ -48,3 +48,4 @@ credit-risk-mlops/
 │   └── deploy.yml
 ├── .gitignore
 └── README.md
+```
