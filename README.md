@@ -29,7 +29,8 @@ It predicts the likelihood of a borrower defaulting on a loan using supervised l
 credit-risk-mlops/
 |
 ├── notebooks/              # EDA and prototyping notebooks
-|
+|   |── Credit_Prediction.ipynb
+|   |── rf_hyperpara.ipynb
 ├── src/                    # Core ML logic (training, pipeline, utils)
 │   ├── pipeline.py
 │   ├── train.py
