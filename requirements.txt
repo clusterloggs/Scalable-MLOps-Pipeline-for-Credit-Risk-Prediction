@@ -5,3 +5,10 @@ scikit-learn
 tabulate
 imbalanced-learn
 xgboost
+scipy
+threadpoolctl
+sklearn-compat
+plotly
+joblib
+nbformat
+pyarrow
