@@ -1,0 +1,12 @@
+{
+    "income": 6000,
+    "home_status": "RENT",
+    "emp_years": 1,
+    "loan_intent": "MEDICAL",
+    "loan_grade": "D",
+    "loan_amount": 10000,
+    "loan_int_rate": 2.14,
+    "loan_status": 1,
+    "loan_percent_income": 12.8,
+    "credit_history": 6
+}
