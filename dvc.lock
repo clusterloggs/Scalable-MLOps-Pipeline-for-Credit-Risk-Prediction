@@ -1,0 +1,74 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py --model_type logistic
+    deps:
+    - path: data/df_clean.parquet
+      hash: md5
+      md5: 96f125e527b66f1ede68df4e60182c95
+      size: 299299
+    - path: src/pipeline.py
+      hash: md5
+      md5: c943457cd0ee1cde2bdc69bb53a5352e
+      size: 2092
+    - path: src/train.py
+      hash: md5
+      md5: 6f01e1673803513cb8072294495600b2
+      size: 4469
+    - path: src/utils.py
+      hash: md5
+      md5: 63f882d0b71a17430cff80f16d43540a
+      size: 557
+    params:
+      params.yaml:
+        logistic:
+          solver: liblinear
+          penalty: l2
+          C: 1
+          max_iter: 1000
+          class_weight: balanced
+        random_forest:
+          n_estimators: 1000
+          random_state: 42
+        train:
+          model_type: logistic
+          test_split_ratio: 0.2
+          random_state: 42
+          stratify: true
+          label_col: default
+          smote_random_state: 42
+          decision_threshold: 0.68
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 57b9ccf4fe9e6349e9f4eb15a56c8fd7
+      size: 1137241
+    - path: reports/metrics.json
+      hash: md5
+      md5: c1089ee0f9c06491a421d4f946362947
+      size: 76
+  evaluate:
+    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path 
+      models/model.joblib --has_labels > reports/classification_report.txt
+    deps:
+    - path: data/df_clean.parquet
+      hash: md5
+      md5: 96f125e527b66f1ede68df4e60182c95
+      size: 299299
+    - path: models/model.joblib
+      hash: md5
+      md5: 57b9ccf4fe9e6349e9f4eb15a56c8fd7
+      size: 1137241
+    - path: src/predict.py
+      hash: md5
+      md5: 6df8408683aa090fbfdcf32a2c2820e5
+      size: 2337
+    - path: src/utils.py
+      hash: md5
+      md5: 63f882d0b71a17430cff80f16d43540a
+      size: 557
+    outs:
+    - path: reports/classification_report.txt
+      hash: md5
+      md5: 91cd27fad736275cc5b0d346f725a45b
+      size: 112

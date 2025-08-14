@@ -1,9 +1,6 @@
 # src/predict.py
 
-import argparse
-import pandas as pd
-import joblib
-import json
+import argparse, pandas as pd, joblib, json
 from utils import load_data
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
@@ -43,7 +40,7 @@ def predict_single(sample_json, model_path):
     print("Making prediction ...")
     prediction = model.predict(df)[0]
 
-    print(f"Prediction: {prediction} (1 = Default, 0 = No Default)")
+    print(f"Prediction: {prediction} (Y = Default, N = No Default)")
 
 
 if __name__ == "__main__":
