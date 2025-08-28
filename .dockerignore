@@ -1,0 +1,18 @@
+# .dockerignore
+
+# Git
+.git
+.gitignore
+
+# DVC
+.dvc/
+.dvcignore
+
+# Python virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# Other
+notebooks/
+README.md

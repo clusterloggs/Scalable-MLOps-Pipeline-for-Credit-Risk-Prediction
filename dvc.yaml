@@ -17,7 +17,7 @@ stages:
           cache: false
 
   evaluate:
-    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path models/model.joblib --has_labels > reports/classification_report.txt
+    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path models/model.joblib --has_labels --report_path reports/classification_report.txt
     deps:
       - data/df_clean.parquet
       - models/model.joblib

@@ -2,17 +2,17 @@
 
 
 An end-to-end machine learning web application for credit risk classification.
-It predicts the likelihood of a borrower defaulting on a loan using supervised learning and includes full MLOps capabilities, including model training, deployment (using Docker and Heroku), CI/CD (GitHub Actions), and automated monitoring/retraining.
+It predicts the likelihood of a borrower defaulting on a loan using supervised learning and includes full MLOps capabilities, including model training, deployment (using Docker and AWS), CI/CD (GitHub Actions), and automated monitoring/retraining.
 
 ## Features
 
 - Data preprocessing and feature engineering
-- Model training and evaluation (Random Forest, SVM, Logistic Regression)
+- Model training and evaluation (Random Forest, Logistic Regression)
 - Modular pipeline with sklearn.pipeline
 - Model versioning with joblib
 - Containerized with Docker
 - CI/CD enabled via GitHub Actions
-- Deployed on Heroku
+- Deployed
 - Model monitoring & auto-retraining support
 
 ## Tech Stack

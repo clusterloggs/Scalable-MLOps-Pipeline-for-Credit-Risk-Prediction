@@ -1,0 +1,27 @@
+stages:
+  train:
+    cmd: python src/train.py --model_type ${train.model_type}
+    deps:
+      - data/df_clean.parquet
+      - src/pipeline.py
+      - src/train.py
+      - src/utils.py
+    params:
+      - train
+      - logistic
+      - random_forest
+    outs:
+      - models/model.joblib
+    metrics:
+      - reports/metrics.json:
+          cache: false
+
+  evaluate:
+    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path models/model.joblib --has_labels > reports/classification_report.txt
+    deps:
+      - data/df_clean.parquet
+      - models/model.joblib
+      - src/predict.py
+      - src/utils.py
+    outs:
+      - reports/classification_report.txt

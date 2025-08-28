@@ -14,8 +14,9 @@ def build_pipeline(
     num_cols: List[str] = [],
     smote_random_state: int = 42
 ) -> Pipeline:
+    
     """
-    Builds a machine learning pipeline with preprocessing, oversampling, and a classifier.
+    pipeline with preprocessing, ohe, oversampling, and a classifier.
 
     Args:
         model_type (str): The type of model to use ('logistic' or 'random_forest').
@@ -30,6 +31,7 @@ def build_pipeline(
     Returns:
         Pipeline: A scikit-learn compatible pipeline object.
     """
+
     # Define preprocessing
     preprocessor = ColumnTransformer(transformers=[
         ('cat', OneHotEncoder(drop='first',
@@ -38,13 +40,17 @@ def build_pipeline(
         ('num', StandardScaler(), num_cols),
     ])
 
-    # Select model
-    if model_type == "logistic":
-        model = LogisticRegression(**model_params)
-    elif model_type == "random_forest":
-        model = RandomForestClassifier(**model_params)
-    else:
-        raise ValueError(f"Invalid model type: '{model_type}'. Supported types are 'logistic' and 'random_forest'.")
+    # Define a model registry for easy extension
+    model_registry = {
+        "logistic": LogisticRegression,
+        "random_forest": RandomForestClassifier,
+    }
+
+    if model_type not in model_registry:
+        raise ValueError(
+            f"Invalid model type: '{model_type}'. Supported types are {list(model_registry.keys())}."
+        )
+    model = model_registry[model_type](**model_params)
 
     # Build pipeline
     pipeline = Pipeline(steps=[

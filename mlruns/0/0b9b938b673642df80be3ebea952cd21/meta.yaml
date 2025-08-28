@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/0b9b938b673642df80be3ebea952cd21/artifacts
+deleted_time: 1755754720538
+end_time: 1755754577507
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 0b9b938b673642df80be3ebea952cd21
+run_name: bemused-rook-928
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755754553324
+status: 3
+tags: []
+user_id: zeid9

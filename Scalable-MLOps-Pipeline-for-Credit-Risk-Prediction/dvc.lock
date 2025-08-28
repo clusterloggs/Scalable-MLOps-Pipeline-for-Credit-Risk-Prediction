@@ -1,0 +1,77 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/train.py --model_type logistic
+    deps:
+    - path: data/df_clean.parquet
+      hash: md5
+      md5: d7a8c69f0a6f073c26384d44e9d35195
+      size: 299368
+    - path: src/pipeline.py
+      hash: md5
+      md5: bd512010e7621824abcebba26e3c5ab7
+      size: 2121
+    - path: src/train.py
+      hash: md5
+      md5: 4947cea57cde25958a58b8c8df79ab0b
+      size: 4254
+    - path: src/utils.py
+      hash: md5
+      md5: 63f882d0b71a17430cff80f16d43540a
+      size: 557
+    params:
+      params.yaml:
+        logistic:
+          solver: liblinear
+          penalty: l2
+          C: 1
+          max_iter: 1000
+          class_weight: balanced
+        random_forest:
+          max_features: 5
+          n_estimators: 405
+          class_weight: balanced
+          max_depth: 8
+          min_samples_split: 15
+          min_samples_leaf: 1
+        train:
+          model_type: logistic
+          test_split_ratio: 0.2
+          random_state: 42
+          stratify: true
+          smote_random_state: 42
+          decision_threshold: 0.6
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 3c06bb6533d3a83d619002f2af60a03e
+      size: 740729
+    - path: reports/metrics.json
+      hash: md5
+      md5: 8c50430d89de7335cb370e538cff9c91
+      size: 171
+  evaluate:
+    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path 
+      models/model.joblib --has_labels > reports/classification_report.txt
+    deps:
+    - path: data/df_clean.parquet
+      hash: md5
+      md5: d7a8c69f0a6f073c26384d44e9d35195
+      size: 299368
+    - path: models/model.joblib
+      hash: md5
+      md5: 3c06bb6533d3a83d619002f2af60a03e
+      size: 740729
+    - path: src/predict.py
+      hash: md5
+      md5: d2c720925b8d8b8584ab1fe618801db5
+      size: 2623
+    - path: src/utils.py
+      hash: md5
+      md5: 63f882d0b71a17430cff80f16d43540a
+      size: 557
+    outs:
+    - path: reports/classification_report.txt
+      hash: md5
+      md5: 0c1cb9cc8913b555e7b51c5b677db959
+      size: 112

@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/b6c9b7d36f88454dab338a02646c988e/artifacts
+end_time: 1755754960075
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b6c9b7d36f88454dab338a02646c988e
+run_name: resilient-stoat-665
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755754954645
+status: 3
+tags: []
+user_id: zeid9

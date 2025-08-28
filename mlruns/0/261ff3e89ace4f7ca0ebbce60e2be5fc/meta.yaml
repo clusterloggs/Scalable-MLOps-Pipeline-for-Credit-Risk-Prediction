@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/261ff3e89ace4f7ca0ebbce60e2be5fc/artifacts
+end_time: 1755754791982
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 261ff3e89ace4f7ca0ebbce60e2be5fc
+run_name: powerful-whale-831
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1755754786457
+status: 3
+tags: []
+user_id: zeid9

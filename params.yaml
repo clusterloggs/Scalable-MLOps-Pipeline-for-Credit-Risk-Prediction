@@ -1,17 +1,17 @@
 # params.yaml
 train:
-  model_type: logistic            # 'logistic' or 'random_forest'
+  model_type: logistic       # 'logistic' or 'random_forest'
   test_split_ratio: 0.2
   random_state: 42
   stratify: true
-  label_col: default
   smote_random_state: 42
-  decision_threshold: 0.68
+  decision_threshold: 0.60
 
 features:
   categorical:
     - home_status
     - loan_intent
+    - loan_grade
   numerical:
     - income
     - emp_years
@@ -23,10 +23,14 @@ features:
 logistic:
   solver: liblinear
   penalty: l2
-  C: 1
-  max_iter: 1000
+  C: 0.4
+  max_iter: 5000
   class_weight: balanced
 
 random_forest:
-  n_estimators: 1000
-  random_state: 42
+  max_features: 5
+  n_estimators: 405
+  class_weight: balanced
+  max_depth: 8
+  min_samples_split: 15
+  min_samples_leaf: 1
