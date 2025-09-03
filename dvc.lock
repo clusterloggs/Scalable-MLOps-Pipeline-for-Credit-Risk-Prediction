@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python src/train.py --model_type random_forest
+    cmd: python src/train.py --model_type logistic
     deps:
     - path: data/df_clean.parquet
       hash: md5
@@ -24,8 +24,8 @@ stages:
         logistic:
           solver: liblinear
           penalty: l2
-          C: 0.34
-          max_iter: 1290
+          C: 0.55
+          max_iter: 1110
           class_weight: balanced
         random_forest:
           max_features: 5
@@ -35,7 +35,7 @@ stages:
           min_samples_split: 2
           min_samples_leaf: 1
         train:
-          model_type: random_forest
+          model_type: logistic
           test_split_ratio: 0.2
           random_state: 42
           stratify: true
@@ -52,8 +52,8 @@ stages:
       size: 219221
     - path: models/model.joblib
       hash: md5
-      md5: c178f76d9a942effc96ec57fcca49578
-      size: 7897310
+      md5: 86c86fe74fd4f08adef03811fa214ef3
+      size: 740649
   evaluate:
     cmd: python src/evaluation.py --evaluate --report_path 
       reports/classification_report.txt --metrics_path reports/metrics.json
@@ -99,8 +99,8 @@ stages:
       size: 62598
     - path: models/model.joblib
       hash: md5
-      md5: c178f76d9a942effc96ec57fcca49578
-      size: 7897310
+      md5: 86c86fe74fd4f08adef03811fa214ef3
+      size: 740649
     - path: src/evaluation.py
       hash: md5
       md5: da52a9d46596aaa37f25a4ff625e0a1c
@@ -118,9 +118,9 @@ stages:
     outs:
     - path: reports/classification_report.txt
       hash: md5
-      md5: 72aa06fa6ce0d7e0599494c6e9b17d89
+      md5: 7b4846c7dbf189afbfb0b0b1cdd9b37e
       size: 360
     - path: reports/metrics.json
       hash: md5
-      md5: 1bd4358e35e99a3af9d4add50830653d
+      md5: 7eabaccee18164badaf361ea262acb2a
       size: 82

@@ -81,15 +81,15 @@ def train_model(data_path, model_type, test_split_ratio, output_path, metrics_pa
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         joblib.dump(pipeline, output_path)
 
-        logging.info("Logging model to MLflow...")
-        mlflow.sklearn.log_model(
-            sk_model=pipeline,
-            artifact_path="model",
-            # Add this line to provide an example and create a signature
-            input_example=X_train.head(), 
-            registered_model_name=f"{model_type}-model"
-        )
-        logging.info("Model logged to MLflow.")
+        # logging.info("Logging model to MLflow...")
+        # mlflow.sklearn.log_model(
+        #     sk_model=pipeline,
+        #     artifact_path="model",
+        #     # Add this line to provide an example and create a signature
+        #     input_example=X_train.head(), 
+        #     registered_model_name=f"{model_type}-model"
+        # )
+        # logging.info("Model logged to MLflow.")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()

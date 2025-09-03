@@ -7,7 +7,7 @@ data:
 
 
 train:
-  model_type: random_forest    # 'logistic' or 'random_forest'
+  model_type: logistic    # 'logistic' or 'random_forest'
   test_split_ratio: 0.2
   random_state: 42
   stratify: true
@@ -30,8 +30,8 @@ features:
 logistic:
   solver: liblinear
   penalty: l2
-  C: 0.34
-  max_iter: 1290
+  C: 0.55
+  max_iter: 1110
   class_weight: balanced
 
 random_forest:

@@ -1,0 +1,39 @@
+artifact_path: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/models/m-0ec20b54484b48f49246e5fd39333cb8/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.0
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+is_signature_from_type_hint: false
+mlflow_version: 3.3.2
+model_id: m-0ec20b54484b48f49246e5fd39333cb8
+model_size_bytes: 740499
+model_uuid: m-0ec20b54484b48f49246e5fd39333cb8
+prompts: null
+run_id: 1e24dba365884f01ace6e8b4524ee803
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "string", "name": "home_status", "required": true}, {"type":
+    "string", "name": "loan_intent", "required": true}, {"type": "string", "name":
+    "loan_grade", "required": true}, {"type": "long", "name": "income", "required":
+    true}, {"type": "double", "name": "emp_years", "required": true}, {"type": "long",
+    "name": "loan_amount", "required": true}, {"type": "double", "name": "loan_int_rate",
+    "required": true}, {"type": "double", "name": "loan_percent_income", "required":
+    true}, {"type": "long", "name": "credit_history", "required": true}]'
+  outputs: '[{"type": "long", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-09-03 14:37:37.275173'
