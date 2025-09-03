@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/models/m-9da2808beb0e46768e4faaf8a580a16e/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.0
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.1
+mlflow_version: 3.3.2
+model_id: m-9da2808beb0e46768e4faaf8a580a16e
+model_size_bytes: 738933
+model_uuid: m-9da2808beb0e46768e4faaf8a580a16e
+prompts: null
+run_id: 34b61c2bce654eaa8bde9b1c998e5b28
+utc_time_created: '2025-09-03 13:36:32.167940'

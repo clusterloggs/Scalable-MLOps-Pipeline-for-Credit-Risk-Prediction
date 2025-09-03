@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/89ad4e5011b84af1ab9b118733a48ed5/artifacts
+end_time: 1756904783750
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 89ad4e5011b84af1ab9b118733a48ed5
+run_name: charming-goose-427
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1756904781825
+status: 3
+tags: []
+user_id: zeid9

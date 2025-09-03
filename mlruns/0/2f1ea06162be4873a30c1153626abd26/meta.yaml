@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/2f1ea06162be4873a30c1153626abd26/artifacts
+end_time: 1756907288660
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2f1ea06162be4873a30c1153626abd26
+run_name: luxuriant-fawn-281
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1756907283011
+status: 3
+tags: []
+user_id: zeid9

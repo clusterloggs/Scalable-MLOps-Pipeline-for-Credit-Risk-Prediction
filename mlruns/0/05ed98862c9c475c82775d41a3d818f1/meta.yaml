@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/05ed98862c9c475c82775d41a3d818f1/artifacts
+end_time: 1756909553134
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 05ed98862c9c475c82775d41a3d818f1
+run_name: efficient-midge-40
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1756909547311
+status: 3
+tags: []
+user_id: zeid9

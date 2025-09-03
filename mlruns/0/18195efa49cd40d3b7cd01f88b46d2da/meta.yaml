@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/18195efa49cd40d3b7cd01f88b46d2da/artifacts
+end_time: 1756905769406
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 18195efa49cd40d3b7cd01f88b46d2da
+run_name: traveling-mule-595
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1756905763930
+status: 3
+tags: []
+user_id: zeid9

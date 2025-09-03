@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python src/train.py --model_type logistic
+    cmd: python src/train.py --model_type random_forest
     deps:
     - path: data/df_clean.parquet
       hash: md5
@@ -13,8 +13,8 @@ stages:
       size: 2160
     - path: src/train.py
       hash: md5
-      md5: 283c2578adf8ba39fed38b00b8754524
-      size: 4871
+      md5: f44c9a5b7e91c7178f70632bb5777241
+      size: 4418
     - path: src/utils.py
       hash: md5
       md5: 63f882d0b71a17430cff80f16d43540a
@@ -24,55 +24,103 @@ stages:
         logistic:
           solver: liblinear
           penalty: l2
-          C: 0.4
-          max_iter: 5000
+          C: 0.34
+          max_iter: 1290
           class_weight: balanced
         random_forest:
           max_features: 5
           n_estimators: 405
           class_weight: balanced
           max_depth: 8
-          min_samples_split: 15
+          min_samples_split: 2
           min_samples_leaf: 1
         train:
-          model_type: logistic
+          model_type: random_forest
           test_split_ratio: 0.2
           random_state: 42
           stratify: true
           smote_random_state: 42
           decision_threshold: 0.6
     outs:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 6c36f8d846e3ca4dd270ee2507abce6d
+      size: 62598
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: b6d3e446e0244fe9af64ab2e6cafc886
+      size: 219221
     - path: models/model.joblib
       hash: md5
-      md5: b071b687d75837bf3780fdce81142b8a
-      size: 740745
-    - path: reports/metrics.json
-      hash: md5
-      md5: 0e92c7faf7ea686db79fbca4e30f1174
-      size: 171
+      md5: c178f76d9a942effc96ec57fcca49578
+      size: 7897310
   evaluate:
-    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path 
-      models/model.joblib --has_labels --report_path 
-      reports/classification_report.txt
+    cmd: python src/evaluation.py --evaluate --report_path 
+      reports/classification_report.txt --metrics_path reports/metrics.json
     deps:
-    - path: data/df_clean.parquet
+    - path: data/processed/test.parquet
       hash: md5
-      md5: d7a8c69f0a6f073c26384d44e9d35195
-      size: 299368
+      md5: 6c36f8d846e3ca4dd270ee2507abce6d
+      size: 62598
     - path: models/model.joblib
       hash: md5
-      md5: b071b687d75837bf3780fdce81142b8a
-      size: 740745
-    - path: src/predict.py
+      md5: 5022f7fab07697ab9d4b70d7d8c4f71c
+      size: 740649
+    - path: src/evaluation.py
       hash: md5
-      md5: 5925561f0ce018993b8d25fe1a1ec28f
-      size: 3759
+      md5: da52a9d46596aaa37f25a4ff625e0a1c
+      size: 4742
     - path: src/utils.py
       hash: md5
       md5: 63f882d0b71a17430cff80f16d43540a
       size: 557
+    params:
+      params.yaml:
+        data:
+          raw_path: data/df_clean.parquet
+          train_path: data/processed/train.parquet
+          test_path: data/processed/test.parquet
     outs:
     - path: reports/classification_report.txt
       hash: md5
-      md5: ed41503e9f93fec1bc64856039f31d42
+      md5: 7b4846c7dbf189afbfb0b0b1cdd9b37e
       size: 360
+    - path: reports/metrics.json
+      hash: md5
+      md5: 7eabaccee18164badaf361ea262acb2a
+      size: 82
+  evaluation:
+    cmd: python src/evaluation.py --evaluate --report_path 
+      reports/classification_report.txt --metrics_path reports/metrics.json
+    deps:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 6c36f8d846e3ca4dd270ee2507abce6d
+      size: 62598
+    - path: models/model.joblib
+      hash: md5
+      md5: c178f76d9a942effc96ec57fcca49578
+      size: 7897310
+    - path: src/evaluation.py
+      hash: md5
+      md5: da52a9d46596aaa37f25a4ff625e0a1c
+      size: 4742
+    - path: src/utils.py
+      hash: md5
+      md5: 63f882d0b71a17430cff80f16d43540a
+      size: 557
+    params:
+      params.yaml:
+        data:
+          raw_path: data/df_clean.parquet
+          train_path: data/processed/train.parquet
+          test_path: data/processed/test.parquet
+    outs:
+    - path: reports/classification_report.txt
+      hash: md5
+      md5: 72aa06fa6ce0d7e0599494c6e9b17d89
+      size: 360
+    - path: reports/metrics.json
+      hash: md5
+      md5: 1bd4358e35e99a3af9d4add50830653d
+      size: 82

@@ -12,16 +12,20 @@ stages:
       - random_forest
     outs:
       - models/model.joblib
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+
+  evaluation:
+    cmd: python src/evaluation.py --evaluate --report_path reports/classification_report.txt --metrics_path reports/metrics.json
+    deps:
+      - src/evaluation.py
+      - src/utils.py
+      - data/processed/test.parquet
+      - models/model.joblib
+    params:
+      - data # evaluation.py reads params.yaml to get the test data path
+    outs:
+      - reports/classification_report.txt
     metrics:
       - reports/metrics.json:
           cache: false
-
-  evaluate:
-    cmd: python src/predict.py --data_path data/df_clean.parquet --model_path models/model.joblib --has_labels --report_path reports/classification_report.txt
-    deps:
-      - data/df_clean.parquet
-      - models/model.joblib
-      - src/predict.py
-      - src/utils.py
-    outs:
-      - reports/classification_report.txt

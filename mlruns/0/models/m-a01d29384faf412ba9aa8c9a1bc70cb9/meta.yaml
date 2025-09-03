@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/models/m-a01d29384faf412ba9aa8c9a1bc70cb9/artifacts
+creation_timestamp: 1756908179203
+experiment_id: '0'
+last_updated_timestamp: 1756908183176
+model_id: m-a01d29384faf412ba9aa8c9a1bc70cb9
+model_type: null
+name: model
+source_run_id: 17da0eac2e474509b151988e4fb1d2a2
+status: 2
+status_message: null

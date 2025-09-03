@@ -8,6 +8,8 @@ from utils import load_data
 from pipeline import build_pipeline  # if import issues, use: from src.pipeline import build_pipeline
 import logging
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 def train_model(data_path, model_type, test_split_ratio, output_path, metrics_path):
     # ---- load params.yaml ----
     with open("params.yaml") as f:
@@ -30,6 +32,10 @@ def train_model(data_path, model_type, test_split_ratio, output_path, metrics_pa
     # --- model params from YAML ---
     model_params = P["logistic"] if model_type == "logistic" else P["random_forest"]
 
+    # --- data paths for outputs ---
+    train_data_path = P["data"].get("train_path", "data/processed/train.parquet")
+    test_data_path = P["data"].get("test_path", "data/processed/test.parquet")
+
     # --- data ---
     df = load_data(data_path)
     X = df[cat_cols + num_cols]
@@ -39,6 +45,22 @@ def train_model(data_path, model_type, test_split_ratio, output_path, metrics_pa
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_split_ratio, random_state=rnd, stratify=y if do_stratify else None
     )
+
+    # --- Save split data ---
+    logging.info(f"Saving train and test sets...")
+    os.makedirs(os.path.dirname(train_data_path), exist_ok=True)
+    os.makedirs(os.path.dirname(test_data_path), exist_ok=True)
+
+    # Combine features and labels before saving
+    train_df = X_train.copy()
+    train_df[label_col] = y_train
+    train_df.to_parquet(train_data_path, index=False)
+    logging.info(f"Train data saved to {train_data_path}")
+
+    test_df = X_test.copy()
+    test_df[label_col] = y_test
+    test_df.to_parquet(test_data_path, index=False)
+    logging.info(f"Test data saved to {test_data_path}")
 
     # Start an MLflow run
     with mlflow.start_run():
@@ -54,48 +76,20 @@ def train_model(data_path, model_type, test_split_ratio, output_path, metrics_pa
         pipeline = build_pipeline(model_type, model_params, cat_cols, num_cols, smote_rnd)
         pipeline.fit(X_train, y_train)
 
-        print("Evaluating...")
-        metrics = {}
-
-        if hasattr(pipeline, "predict_proba"):
-            proba = pipeline.predict_proba(X_test)[:, 1]
-            y_pred = (proba >= thr).astype(int)   # threshold set in the params
-            metrics['roc_auc'] = roc_auc_score(y_test, proba)
-        else:
-            y_pred = pipeline.predict(X_test)
-
-        # Generate classification report and extract key metrics
-        report = classification_report(y_test, y_pred, output_dict=True)
-        metrics['accuracy'] = accuracy_score(y_test, y_pred)
-        # Extract metrics for the positive class (1), using .get() for safety
-        metrics['precision'] = report.get('1', {}).get('precision', 0)
-        metrics['recall'] = report.get('1', {}).get('recall', 0)
-        metrics['f1_score'] = report.get('1', {}).get('f1-score', 0)
-
-        # Log metrics to MLflow
-        mlflow.log_metrics(metrics)
-        logging.info(f"Metrics logged to MLflow: {metrics}")
-
-        # Print all collected metrics
-        if 'roc_auc' in metrics:
-            print("ROC AUC:", metrics['roc_auc'])
-            print("Accuracy:", metrics['accuracy'])
-            print("Recall:", metrics['recall'])
-            print("Precision:", metrics['precision'])
-            print("Classification Report:\n", classification_report(y_test, y_pred))
-            print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-
-        # Save metrics for DVC
-        os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
-        with open(metrics_path, 'w') as f:
-            json.dump(metrics, f, indent=4)
-        print(f"Metrics saved to {metrics_path}")
-
-        # Log the model to MLflow and save it for DVC
-        mlflow.sklearn.log_model(pipeline, "model")
+        # --- Save model artifact ---
+        logging.info(f"Saving model to {output_path}")
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         joblib.dump(pipeline, output_path)
-        print(f"Model saved to {output_path} and logged to MLflow.")
+
+        logging.info("Logging model to MLflow...")
+        mlflow.sklearn.log_model(
+            sk_model=pipeline,
+            artifact_path="model",
+            # Add this line to provide an example and create a signature
+            input_example=X_train.head(), 
+            registered_model_name=f"{model_type}-model"
+        )
+        logging.info("Model logged to MLflow.")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()

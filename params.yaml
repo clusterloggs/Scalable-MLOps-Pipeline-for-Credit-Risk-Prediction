@@ -1,6 +1,13 @@
 # params.yaml
+
+data:
+  raw_path: "data/df_clean.parquet"
+  train_path: "data/processed/train.parquet"
+  test_path: "data/processed/test.parquet"
+
+
 train:
-  model_type: logistic       # 'logistic' or 'random_forest'
+  model_type: random_forest    # 'logistic' or 'random_forest'
   test_split_ratio: 0.2
   random_state: 42
   stratify: true
@@ -23,8 +30,8 @@ features:
 logistic:
   solver: liblinear
   penalty: l2
-  C: 0.4
-  max_iter: 5000
+  C: 0.34
+  max_iter: 1290
   class_weight: balanced
 
 random_forest:
@@ -32,5 +39,5 @@ random_forest:
   n_estimators: 405
   class_weight: balanced
   max_depth: 8
-  min_samples_split: 15
+  min_samples_split: 2
   min_samples_leaf: 1
