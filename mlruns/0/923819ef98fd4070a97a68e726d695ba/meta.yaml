@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/923819ef98fd4070a97a68e726d695ba/artifacts
+end_time: 1757079013030
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 923819ef98fd4070a97a68e726d695ba
+run_name: clumsy-snail-637
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757079011257
+status: 3
+tags: []
+user_id: zeid9

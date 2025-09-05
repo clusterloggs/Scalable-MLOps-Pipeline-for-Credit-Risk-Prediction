@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/9564337a6d4745e09ab915eabbaf6810/artifacts
+end_time: 1757078806954
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9564337a6d4745e09ab915eabbaf6810
+run_name: popular-duck-102
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757078805216
+status: 3
+tags: []
+user_id: zeid9

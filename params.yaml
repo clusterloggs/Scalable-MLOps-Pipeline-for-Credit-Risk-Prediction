@@ -13,6 +13,8 @@ train:
   stratify: true
   smote_random_state: 42
   decision_threshold: 0.60
+  label_col: default
+
 
 features:
   categorical:
@@ -30,8 +32,8 @@ features:
 logistic:
   solver: liblinear
   penalty: l2
-  C: 0.55
-  max_iter: 1110
+  C: 0.01
+  max_iter: 500
   class_weight: balanced
 
 random_forest:

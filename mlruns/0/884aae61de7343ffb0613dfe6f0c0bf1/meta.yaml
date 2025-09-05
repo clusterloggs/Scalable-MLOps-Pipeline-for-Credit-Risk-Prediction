@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/884aae61de7343ffb0613dfe6f0c0bf1/artifacts
+end_time: 1757073872587
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 884aae61de7343ffb0613dfe6f0c0bf1
+run_name: respected-zebra-136
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757073870729
+status: 3
+tags: []
+user_id: zeid9

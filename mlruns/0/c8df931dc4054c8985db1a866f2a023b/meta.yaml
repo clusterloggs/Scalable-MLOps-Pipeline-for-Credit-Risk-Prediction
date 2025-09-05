@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/0/c8df931dc4054c8985db1a866f2a023b/artifacts
+end_time: 1757078131381
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c8df931dc4054c8985db1a866f2a023b
+run_name: mercurial-robin-123
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757078129666
+status: 3
+tags: []
+user_id: zeid9
