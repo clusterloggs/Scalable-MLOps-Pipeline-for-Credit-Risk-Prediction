@@ -1,5 +1,5 @@
 stages:
-  Data Preprocessing:
+  data_preprocessing:
     cmd: python src/data_preprocessing.py
     deps:
       - data/df_clean.parquet
@@ -15,7 +15,7 @@ stages:
       - data/processed/train.parquet
       - data/processed/test.parquet
 
-  Model Training:
+  model_training:
     cmd: python src/model_training.py --model_type ${train.model_type}
     deps:
       - data/processed/train.parquet
@@ -32,7 +32,7 @@ stages:
     outs:
       - models/model.joblib
 
-  Model Evaluation:
+  model_evaluation:
     cmd: python src/model_evaluation.py --evaluate --report_path reports/classification_report.txt --metrics_path reports/metrics.json
     deps:
       - src/model_evaluation.py

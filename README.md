@@ -1,28 +1,26 @@
-# Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction
+# Scalable MLOps Pipeline for Credit Risk Prediction
 
-
-An end-to-end machine learning web application for credit risk classification.
-It predicts the likelihood of a borrower defaulting on a loan using supervised learning and includes full MLOps capabilities, including model training, deployment (using Docker and AWS), CI/CD (GitHub Actions), and automated monitoring/retraining.
+This project implements an end-to-end machine learning pipeline to predict credit risk. It demonstrates a full MLOps workflow, including data versioning, experiment tracking, automated model training, and deployment of both an interactive UI and a REST API.
 
 ## Features
 
-- Data preprocessing and feature engineering
-- Model training and evaluation (Random Forest, Logistic Regression)
-- Modular pipeline with sklearn.pipeline
-- Model versioning with joblib
-- Containerized with Docker
-- CI/CD enabled via GitHub Actions
-- Deployed
-- Model monitoring & auto-retraining support
+- **Reproducible Pipeline:** Uses DVC to define and execute a version-controlled ML pipeline (preprocessing, training, evaluation).
+- **Experiment Tracking:** Integrates with MLflow and Dagshub for logging parameters, metrics, and model artifacts.
+- **Dual Deployment:**
+  - **Interactive UI:** A Dash dashboard for visual data analysis and single-prediction queries.
+  - **REST API:** A Flask API for programmatic access to the model.
+- **CI/CD Ready:** Structured for easy integration with CI/CD tools like GitHub Actions for automated testing and deployment.
+- **Clean Code:** Follows best practices with modular, well-documented Python scripts.
 
 ## Tech Stack
 
-- Python (3.12)
-- Pandas, NumPy, Scikit-Learn
-- Streamlit or Flask (for UI)
-- Docker & Heroku (Deployment)
-- GitHub Actions (CI/CD)
-- MLflow (Optional: Model registry)
+- **ML & Data:** Python, Scikit-learn, Pandas, imbalanced-learn
+- **Pipeline & Versioning:** DVC, Git
+- **Experiment Tracking:** MLflow, Dagshub
+- **Web Serving:**
+  - **Dash & Plotly:** For the interactive UI dashboard.
+  - **Flask:** For the REST API.
+- **Containerization:** Docker (Dockerfile ready for setup)
 
 ## Project Structure
 
@@ -32,13 +30,18 @@ credit-risk-mlops/
 ├── notebooks/              # EDA and prototyping notebooks
 |   |── Credit_Prediction.ipynb
 |   |── rf_hyperpara.ipynb
-├── src/                    # Core ML logic (training, pipeline, utils)
-│   ├── pipeline.py
-│   ├── train.py
-│   ├── predict.py
+|   |── lr_hyperpara.ipynb
+|   |── xgboost_model.ipynb
+|
+├── src/                    # Core ML logic
+│   ├── data_preprocessing.py
+│   ├── feature_engineering.py
+│   ├── model_evaluation.py
+|   ├── model_training.py
+│   ├── predict_cli.py
 │   └── utils.py
 |
-├── app/                    # Web app (Streamlit or Flask)
+├── app/                    # Web app (Flask)
 │   └── main.py
 |
 ├── models/                 # Trained model artifacts

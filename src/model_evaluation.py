@@ -155,30 +155,6 @@ def evaluate(model_path, report_path, metrics_path):
                        "Please register the model manually from the Dagshub UI's 'Experiments' tab if needed.")
 
     logger.info("Evaluation and logging complete.")
-
-
-def predict_single(sample_json, model_path):
-    """
-    Predicts the class for a single data sample provided as a JSON object.
-    """
-    try:
-        logger.info(f"Loading model from {model_path}")
-        model = joblib.load(model_path)
-    except FileNotFoundError as e:
-        logger.error(f"Model not found: {e}")
-        raise
-
-    try:
-        df_sample = pd.DataFrame(sample_json, index=[0])
-        logger.info(f"Predicting for sample:\n{df_sample}")
-        prediction = model.predict(df_sample)
-        logger.info(f"Prediction result: {prediction[0]}")
-        return prediction
-    except Exception as e:
-        logger.error(f"Error during single prediction: {e}")
-        raise
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -197,11 +173,6 @@ if __name__ == "__main__":
         default="reports/metrics.json",
         help="Path to save the metrics JSON file.",
     )
-    parser.add_argument(
-        "--sample_json",
-        default=None,
-        help="Path to a single JSON file (for individual prediction)",
-    )
 
     args = parser.parse_args()
 
@@ -212,11 +183,7 @@ if __name__ == "__main__":
         mlflow=True,
     )
 
-    if args.sample_json:
-        with open(args.sample_json, "r") as f:
-            sample = json.load(f)
-        predict_single(sample, args.model_path)
-    elif args.evaluate:
+    if args.evaluate:
         with mlflow.start_run():
             logger.info("MLflow run started for evaluation.")
             mlflow.set_tag("mlflow.source.name", "evaluation_stage")
@@ -224,5 +191,5 @@ if __name__ == "__main__":
             logger.info("MLflow run finished.")
     else:
         logger.warning(
-            "Please provide either --evaluate to evaluate the model or --sample_json for a single prediction."
+            "No action requested. Use --evaluate to run model evaluation."
         )

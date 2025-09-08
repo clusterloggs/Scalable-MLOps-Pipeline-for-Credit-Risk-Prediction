@@ -381,3 +381,155 @@ stages:
       hash: md5
       md5: cd4c63cb772e91bfd3e83afbac2cdb5d
       size: 192
+  data_preprocessing:
+    cmd: python src/data_preprocessing.py
+    deps:
+    - path: data/df_clean.parquet
+      hash: md5
+      md5: d7a8c69f0a6f073c26384d44e9d35195
+      size: 299368
+    - path: src/data_preprocessing.py
+      hash: md5
+      md5: 743a38ad41f0e3a9eef63ca1ed097a9b
+      size: 2925
+    - path: src/utils.py
+      hash: md5
+      md5: 7fc9c3f99a23a7eb9ee6e3253257826a
+      size: 747
+    params:
+      params.yaml:
+        features:
+          categorical:
+          - home_status
+          - loan_intent
+          - loan_grade
+          numerical:
+          - income
+          - emp_years
+          - loan_amount
+          - loan_int_rate
+          - loan_percent_income
+          - credit_history
+        train.label_col: default
+        train.random_state: 42
+        train.stratify: true
+        train.test_split_ratio: 0.2
+    outs:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 6c36f8d846e3ca4dd270ee2507abce6d
+      size: 62598
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: b6d3e446e0244fe9af64ab2e6cafc886
+      size: 219221
+  model_training:
+    cmd: python src/model_training.py --model_type logistic
+    deps:
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: b6d3e446e0244fe9af64ab2e6cafc886
+      size: 219221
+    - path: src/feature_engineering.py
+      hash: md5
+      md5: 85738bf1a6e2e2fcf8b596447d8e9e26
+      size: 2160
+    - path: src/model_training.py
+      hash: md5
+      md5: c34a50890217cd74c46173f97fa30469
+      size: 2466
+    - path: src/utils.py
+      hash: md5
+      md5: 7fc9c3f99a23a7eb9ee6e3253257826a
+      size: 747
+    params:
+      params.yaml:
+        features:
+          categorical:
+          - home_status
+          - loan_intent
+          - loan_grade
+          numerical:
+          - income
+          - emp_years
+          - loan_amount
+          - loan_int_rate
+          - loan_percent_income
+          - credit_history
+        logistic:
+          solver: liblinear
+          penalty: l2
+          C: 0.01
+          max_iter: 500
+          class_weight: balanced
+        random_forest:
+          max_features: 5
+          n_estimators: 405
+          class_weight: balanced
+          max_depth: 8
+          min_samples_split: 2
+          min_samples_leaf: 1
+        train.label_col: default
+        train.model_type: logistic
+        train.smote_random_state: 42
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 838999c0fb5bde76e36ec03e018a82a6
+      size: 740649
+  model_evaluation:
+    cmd: python src/model_evaluation.py --evaluate --report_path 
+      reports/classification_report.txt --metrics_path reports/metrics.json
+    deps:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 6c36f8d846e3ca4dd270ee2507abce6d
+      size: 62598
+    - path: models/model.joblib
+      hash: md5
+      md5: 838999c0fb5bde76e36ec03e018a82a6
+      size: 740649
+    - path: src/model_evaluation.py
+      hash: md5
+      md5: 842adb814ae35e2a28f3455585a6e61e
+      size: 7506
+    - path: src/utils.py
+      hash: md5
+      md5: 7fc9c3f99a23a7eb9ee6e3253257826a
+      size: 747
+    params:
+      params.yaml:
+        logistic:
+          solver: liblinear
+          penalty: l2
+          C: 0.01
+          max_iter: 500
+          class_weight: balanced
+        random_forest:
+          max_features: 5
+          n_estimators: 405
+          class_weight: balanced
+          max_depth: 8
+          min_samples_split: 2
+          min_samples_leaf: 1
+        train:
+          model_type: logistic
+          test_split_ratio: 0.2
+          random_state: 42
+          stratify: true
+          smote_random_state: 42
+          decision_threshold: 0.6
+          label_col: default
+    outs:
+    - path: reports/classification_report.txt
+      hash: md5
+      md5: 7149cfa59652d6e79b1af6501aa2223c
+      size: 360
+    - path: reports/confusion_matrix.png
+      hash: md5
+      md5: 2d53f4d9d80b924cc2649f82afa55b33
+      size: 17754
+    - path: reports/metrics.json
+      hash: md5
+      md5: cd4c63cb772e91bfd3e83afbac2cdb5d
+      size: 192
