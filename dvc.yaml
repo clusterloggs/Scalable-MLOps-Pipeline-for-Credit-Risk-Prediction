@@ -1,31 +1,53 @@
 stages:
-  train:
-    cmd: python src/train.py --model_type ${train.model_type}
+  Data Preprocessing:
+    cmd: python src/data_preprocessing.py
     deps:
       - data/df_clean.parquet
-      - src/pipeline.py
-      - src/train.py
+      - src/data_preprocessing.py
       - src/utils.py
     params:
-      - train
+      - train.test_split_ratio
+      - train.random_state
+      - train.stratify
+      - train.label_col
+      - features
+    outs:
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+
+  Model Training:
+    cmd: python src/model_training.py --model_type ${train.model_type}
+    deps:
+      - data/processed/train.parquet
+      - src/feature_engineering.py
+      - src/model_training.py
+      - src/utils.py
+    params:
+      - train.model_type
+      - train.smote_random_state
+      - train.label_col
+      - features
       - logistic
       - random_forest
     outs:
       - models/model.joblib
-      - data/processed/train.parquet
-      - data/processed/test.parquet
 
-  evaluation:
-    cmd: python src/evaluation.py --evaluate --report_path reports/classification_report.txt --metrics_path reports/metrics.json
+  Model Evaluation:
+    cmd: python src/model_evaluation.py --evaluate --report_path reports/classification_report.txt --metrics_path reports/metrics.json
     deps:
-      - src/evaluation.py
+      - src/model_evaluation.py
       - src/utils.py
-      - data/processed/test.parquet
       - models/model.joblib
+      - data/processed/test.parquet
     params:
-      - data # evaluation.py reads params.yaml to get the test data path
+      - train # For logging params
+      - logistic
+      - random_forest
     outs:
       - reports/classification_report.txt
     metrics:
       - reports/metrics.json:
+          cache: false
+    plots:
+      - reports/confusion_matrix.png:
           cache: false

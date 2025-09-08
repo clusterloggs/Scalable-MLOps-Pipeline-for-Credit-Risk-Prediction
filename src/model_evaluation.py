@@ -14,7 +14,7 @@ import logging
 import mlflow
 import mlflow.sklearn
 import dagshub
-from utils import load_data
+from utils import load_data, load_config
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -34,8 +34,7 @@ def evaluate(model_path, report_path, metrics_path):
         metrics_path (str): Path to save machine-readable metrics (JSON).
     """
     # Load params to get label column and mapping
-    with open("params.yaml") as f:
-        P = yaml.safe_load(f)
+    P = load_config()
 
     data_params = P.get("data", {})
     test_data_path = data_params.get("test_path")

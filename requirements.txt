@@ -36,3 +36,7 @@ pyarrow
 tqdm
 PyYAML
 requests
+
+# Web application
+Dash
+dash-bootstrap-components

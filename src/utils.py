@@ -1,7 +1,14 @@
 # src/utils.py
 
 import pandas as pd
+import yaml
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+def load_config(config_path="params.yaml"):
+    """Load YAML configuration file."""
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
+    return config
 
 def load_data(path):
     """Load cleaned dataset."""

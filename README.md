@@ -25,6 +25,7 @@ It predicts the likelihood of a borrower defaulting on a loan using supervised l
 - MLflow (Optional: Model registry)
 
 ## Project Structure
+
 ```
 credit-risk-mlops/
 |
