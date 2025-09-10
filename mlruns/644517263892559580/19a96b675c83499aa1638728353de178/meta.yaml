@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/zeid9/Documents/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction/mlruns/644517263892559580/19a96b675c83499aa1638728353de178/artifacts
+end_time: 1757412869379
+entry_point_name: ''
+experiment_id: '644517263892559580'
+lifecycle_stage: active
+run_id: 19a96b675c83499aa1638728353de178
+run_name: unique-hawk-359
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757412842017
+status: 3
+tags: []
+user_id: zeid9

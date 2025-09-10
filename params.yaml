@@ -1,18 +1,24 @@
 # params.yaml
 
+mlflow:
+  experiment_name: "Credit Risk Prediction"
+  registered_model_name: "CreditRiskModel"
+  tracking_uri: "https://dagshub.com/azkintonde/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction.mlflow"
+
 data:
   raw_path: "data/df_clean.parquet"
   train_path: "data/processed/train.parquet"
   test_path: "data/processed/test.parquet"
 
-
 train:
-  model_type: logistic    # 'logistic' or 'random_forest'
+  model_type: logistic   # 'logistic' or 'random_forest'
   test_split_ratio: 0.2
   random_state: 42
   stratify: true
   smote_random_state: 42
   decision_threshold: 0.60
+  promotion_metric: 'f1_score' # Metric to check for promotion
+  promotion_threshold: 0.85      # Threshold for the metric
   label_col: default
 
 
@@ -33,7 +39,7 @@ logistic:
   solver: liblinear
   penalty: l2
   C: 0.01
-  max_iter: 500
+  max_iter: 1000
   class_weight: balanced
 
 random_forest:

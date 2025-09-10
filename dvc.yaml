@@ -29,8 +29,10 @@ stages:
       - features
       - logistic
       - random_forest
+      - mlflow
     outs:
       - models/model.joblib
+      - models/run_id.txt
 
   model_evaluation:
     cmd: python src/model_evaluation.py --evaluate --report_path reports/classification_report.txt --metrics_path reports/metrics.json
@@ -39,10 +41,12 @@ stages:
       - src/utils.py
       - models/model.joblib
       - data/processed/test.parquet
+      - models/run_id.txt
     params:
       - train # For logging params
       - logistic
       - random_forest
+      - mlflow
     outs:
       - reports/classification_report.txt
     metrics:

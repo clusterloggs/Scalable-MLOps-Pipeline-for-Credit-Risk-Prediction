@@ -1,26 +1,42 @@
-# Use a smaller, more secure base image
-FROM python:3.12-slim
 
-# Set the working directory in the container
+FROM python:3.12 AS builder
+
 WORKDIR /app
 
-# Create a non-root user and group
+
+COPY requirements-serving.txt .
+
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install --no-cache-dir -r requirements-serving.txt
+
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install curl for health checks, then clean up the apt cache to keep the image small
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN groupadd --system app && useradd --system --gid app app
 
-# Copy just the requirements file to leverage Docker cache
-COPY requirements.txt .
+COPY --from=builder /opt/venv /opt/venv
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy only the necessary application code, data, and models for serving
+COPY --chown=app:app app/ /app/app
+COPY --chown=app:app models/ /app/models
+COPY --chown=app:app data/df_clean.parquet /app/data/df_clean.parquet
 
-# Copy the rest of the application code and set permissions
-COPY --chown=app:app . /app
-
-# Switch to the non-root user
+ENV PATH="/opt/venv/bin:$PATH"
 USER app
 
-# Expose the port the app runs on
-EXPOSE $PORT
+EXPOSE 8000
 
-# The command to run the application
-CMD ["gunicorn", "--workers=4", "--bind", "0.0.0.0:$PORT", "app:app"]
+# Add a health check to ensure the application is responsive.
+# It gives the app 30s to start, then checks every 30s.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8000/ || exit 1
+
+CMD ["gunicorn", "--workers=4", "--bind", "0.0.0.0:8000", "app.main:app"]
