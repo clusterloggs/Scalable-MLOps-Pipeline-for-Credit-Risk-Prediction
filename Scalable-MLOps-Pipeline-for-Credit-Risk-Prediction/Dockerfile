@@ -11,7 +11,7 @@ RUN groupadd --system app && useradd --system --gid app app
 COPY requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && rm -f requirements.txt
 
 # Copy the rest of the application code and set permissions
 COPY --chown=app:app . /app

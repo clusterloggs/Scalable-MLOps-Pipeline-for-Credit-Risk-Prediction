@@ -382,7 +382,8 @@ stages:
       md5: cd4c63cb772e91bfd3e83afbac2cdb5d
       size: 192
   data_preprocessing:
-    cmd: python src/data_preprocessing.py
+    cmd: python src/data_preprocessing.py --config params.yaml --data_path 
+      data/df_clean.parquet
     deps:
     - path: data/df_clean.parquet
       hash: md5
@@ -398,6 +399,10 @@ stages:
       size: 747
     params:
       params.yaml:
+        data:
+          raw_path: data/df_clean.parquet
+          train_path: data/processed/train.parquet
+          test_path: data/processed/test.parquet
         features:
           categorical:
           - home_status
@@ -417,19 +422,20 @@ stages:
     outs:
     - path: data/processed/test.parquet
       hash: md5
-      md5: 6c36f8d846e3ca4dd270ee2507abce6d
-      size: 62598
+      md5: 3d7ab95cd03ae4c68acb3c87299fcafa
+      size: 62558
     - path: data/processed/train.parquet
       hash: md5
-      md5: b6d3e446e0244fe9af64ab2e6cafc886
-      size: 219221
+      md5: 8a10e1532c910bebad91b16e16413296
+      size: 219181
   model_training:
-    cmd: python src/model_training.py --model_type logistic
+    cmd: python src/model_training.py --model_type logistic --output_path 
+      models/model.joblib
     deps:
     - path: data/processed/train.parquet
       hash: md5
-      md5: b6d3e446e0244fe9af64ab2e6cafc886
-      size: 219221
+      md5: 8a10e1532c910bebad91b16e16413296
+      size: 219181
     - path: src/feature_engineering.py
       hash: md5
       md5: 85738bf1a6e2e2fcf8b596447d8e9e26
@@ -484,23 +490,24 @@ stages:
       size: 740617
     - path: models/run_id.txt
       hash: md5
-      md5: 5cec3c530924e74657f9b5b2ab250930
+      md5: da11c407139bc654356ffc7091990c98
       size: 32
   model_evaluation:
-    cmd: python src/model_evaluation.py --evaluate --report_path 
-      reports/classification_report.txt --metrics_path reports/metrics.json
+    cmd: python src/model_evaluation.py --evaluate --model_path 
+      models/model.joblib --report_path reports/classification_report.txt 
+      --metrics_path reports/metrics.json
     deps:
     - path: data/processed/test.parquet
       hash: md5
-      md5: 6c36f8d846e3ca4dd270ee2507abce6d
-      size: 62598
+      md5: 3d7ab95cd03ae4c68acb3c87299fcafa
+      size: 62558
     - path: models/model.joblib
       hash: md5
       md5: d5cb4402acdbc3563fed941a96eba15d
       size: 740617
     - path: models/run_id.txt
       hash: md5
-      md5: 5cec3c530924e74657f9b5b2ab250930
+      md5: da11c407139bc654356ffc7091990c98
       size: 32
     - path: src/model_evaluation.py
       hash: md5
@@ -512,24 +519,11 @@ stages:
       size: 747
     params:
       params.yaml:
-        logistic:
-          solver: liblinear
-          penalty: l2
-          C: 0.01
-          max_iter: 1000
-          class_weight: balanced
         mlflow:
           experiment_name: Credit Risk Prediction
           registered_model_name: CreditRiskModel
           tracking_uri: 
             https://dagshub.com/azkintonde/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction.mlflow
-        random_forest:
-          max_features: 5
-          n_estimators: 405
-          class_weight: balanced
-          max_depth: 8
-          min_samples_split: 2
-          min_samples_leaf: 1
         train:
           model_type: logistic
           test_split_ratio: 0.2

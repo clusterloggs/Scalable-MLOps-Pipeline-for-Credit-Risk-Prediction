@@ -22,6 +22,58 @@ This project implements an end-to-end machine learning pipeline to predict credi
   - **Flask:** For the REST API.
 - **Containerization:** Docker (Dockerfile ready for setup)
 
+## How to Run
+
+### 1. Setup
+
+First, clone the repository and set up the Python environment:
+
+```bash
+# Clone the repo
+git clone https://github.com/azkintonde/Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction.git
+cd Scalable-MLOps-Pipeline-for-Credit-Risk-Prediction
+
+# Create and activate a virtual environment
+py -3.12 -m venv venv (Python 3.12 is recommend)
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Run the ML Pipeline
+
+Use DVC to reproduce the pipeline and generate the model artifact. You will need to configure your MLflow credentials first (e.g., by running `dagshub login`).
+
+```bash
+dvc repro
+```
+You can run this command ```dvc dag``` to see the pipeline flow diagram
+### 3. Run the Web Application
+
+*   **On Windows**, use `waitress`:
+    ```bash
+    waitress-serve --host=0.0.0.0 --port=8080 app.main:server
+    ```
+*   On **Linux or macOS** (and in Docker), use `gunicorn`:
+    ```bash
+    gunicorn --bind 0.0.0.0:8080 app.main:server
+    ```
+
+### 4. Run with Docker
+
+The project includes a `Dockerfile` for containerizing the web application. This is the recommended way to run the application in production.
+
+1.  **Build the Docker image:**
+    ```bash
+    docker build -t credit-risk-app .
+    ```
+2.  **Run the Docker container:**
+    ```bash
+    docker run -p 8080:8080 credit-risk-app
+    ```
+    You can then access the application at `http://localhost:8080`.
+
 ## Project Structure
 
 ```

@@ -8,26 +8,38 @@ import pandas as pd  # Library for data manipulation and analysis
 import numpy as np  # Library for numerical computations
 import joblib  # For loading the trained model
 import os  # For path operations
+import yaml # To load params.yaml
 import dash_bootstrap_components as dbc  # Bootstrap components for styling Dash apps
 
 
 # --- Model Loading ---
-# Load the trained model pipeline once when the application starts.
-MODEL_PATH = 'models/model.joblib'
+# Construct paths relative to this script's location for robustness.
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)  # This is the project root
+
+MODEL_PATH = os.path.join(ROOT_DIR, 'models', 'model.joblib')
 try:
     model = joblib.load(MODEL_PATH)
     print(f"Model loaded successfully from {MODEL_PATH}")
 except FileNotFoundError:
     model = None
-    print(f"Error: Model file not found at {MODEL_PATH}")
+    print(f"Error: Model file not found at {MODEL_PATH}. Make sure you have run the DVC pipeline.")
+
+# --- Load Configuration ---
+PARAMS_PATH = os.path.join(ROOT_DIR, 'params.yaml')
+try:
+    with open(PARAMS_PATH, 'r') as f:
+        params = yaml.safe_load(f)
+except FileNotFoundError:
+    params = {}
 
 # --- Data Loading for UI & Visualizations ---
 # Load the dataset to populate dropdowns and power visualizations.
-# Assumes the app is run from the project's root directory.
+DATA_PATH = os.path.join(ROOT_DIR, 'data', 'df_clean.parquet')
 try:
-    df_viz = pd.read_parquet("data/df_clean.parquet")
+    df_viz = pd.read_parquet(DATA_PATH)
 except FileNotFoundError:
-    print("Warning: data/df_clean.parquet not found. Visualizations and dropdowns may not work correctly.")
+    print(f"Warning: {DATA_PATH} not found. Visualizations and dropdowns may not work correctly.")
     # Create an empty dataframe with expected columns to prevent app from crashing
     df_viz = pd.DataFrame({col: [] for col in [
         'income', 'emp_years', 'loan_amount', 'loan_int_rate', 'loan_percent_income',
@@ -265,13 +277,13 @@ def predict_default(n_clicks, income, emp_years, loan_amount, loan_int_rate,
             if any(i is None for i in all_inputs):
                 return dbc.Alert("Please fill in all fields to get a prediction.", color="warning")
            
-            # Create a DataFrame with the correct feature names for the model pipeline
-            feature_names = [
-                'income', 'emp_years', 'loan_amount', 'loan_int_rate',
-                'loan_percent_income', 'credit_history', 'home_status',
-                'loan_intent', 'loan_grade'
-            ]
-            input_data = pd.DataFrame([all_inputs], columns=feature_names)
+            # Create a DataFrame with feature names from params.yaml for robustness
+            if not params:
+                 return dbc.Alert("params.yaml not found. Cannot determine feature names.", color="danger")
+            
+            feature_params = params.get('features', {})
+            feature_names = feature_params.get('numerical', []) + feature_params.get('categorical', [])
+            input_data = pd.DataFrame([all_inputs], columns=feature_names) 
 
             # Ensure correct data types for numerical columns
             for col in ['income', 'emp_years', 'loan_amount', 'loan_int_rate', 'loan_percent_income', 'credit_history']:
@@ -297,6 +309,9 @@ def predict_default(n_clicks, income, emp_years, loan_amount, loan_int_rate,
 
 
 # Run the app
+# This block is for local development. For production, use a WSGI server like Gunicorn.
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    # Setting debug=False is recommended for a more stable environment,
+    # even in local testing before deployment.
+    app.run(debug=False, host='0.0.0.0', port=port)

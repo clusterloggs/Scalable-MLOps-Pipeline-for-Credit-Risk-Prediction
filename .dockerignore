@@ -1,26 +1,29 @@
-# Git and DVC metadata
+# Git and DVC versioning folders
 .git
-.gitignore
 .dvc
 .dvcignore
 dvc.lock
 
-# Python virtual environment and cache
+# Python virtual environments
 .venv
-venv/
-env/
-__pycache__/
+venv
+env
+
+# Python cache files
+__pycache__
 *.pyc
+*.pyo
+*.pyd
 
-# Notebooks and development artifacts
+# IDE and editor configuration
+.vscode
+.idea
+
+# Test and coverage reports
+.pytest_cache
+htmlcov/
+
+# Local development artifacts
 notebooks/
-*.ipynb
-
-# Local config and cache
-.vscode/
-.idea/
-.pytest_cache/
-mlruns/
-
-# Documentation
-README.md
+reports/
+.env

@@ -23,7 +23,7 @@ features:
 logistic:
   solver: liblinear
   penalty: l2
-  C: 1
+  C: 0.32
   max_iter: 1000
   class_weight: balanced
 

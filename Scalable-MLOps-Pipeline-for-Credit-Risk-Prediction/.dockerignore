@@ -1,0 +1,12 @@
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+.dvc
+.vscode
+notebooks/
+data/
+dvc.yaml
+params.yaml

@@ -1,42 +1,43 @@
-
-FROM python:3.12 AS builder
+# Stage 1: Builder - Install dependencies in a virtual environment
+FROM python:3.12-slim as builder
 
 WORKDIR /app
 
+# Prevent Python from writing .pyc files
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY requirements-serving.txt .
-
+# Create and activate a virtual environment
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir -r requirements-serving.txt
 
+# Copy requirements and install dependencies into the venv
+COPY requirements.txt requirements-serving.txt ./
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir -r requirements-serving.txt
 
+# Stage 2: Final Image - Setup the runtime environment
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install curl for health checks, then clean up the apt cache to keep the image small
-RUN apt-get update && \
-    apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN groupadd --system app && useradd --system --gid app app
-
+# Copy the virtual environment from the builder stage
 COPY --from=builder /opt/venv /opt/venv
-
-# Copy only the necessary application code, data, and models for serving
-COPY --chown=app:app app/ /app/app
-COPY --chown=app:app models/ /app/models
-COPY --chown=app:app data/df_clean.parquet /app/data/df_clean.parquet
-
 ENV PATH="/opt/venv/bin:$PATH"
-USER app
 
-EXPOSE 8000
+# Create a non-root user for security
+RUN useradd --create-home appuser
+USER appuser
 
-# Add a health check to ensure the application is responsive.
-# It gives the app 30s to start, then checks every 30s.
-HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:8000/ || exit 1
+# Copy application code and necessary data/model files
+COPY --chown=appuser:appuser app/ ./app/
+COPY --chown=appuser:appuser src/ ./src/
+COPY --chown=appuser:appuser models/ ./models/
+COPY --chown=appuser:appuser data/df_clean.parquet ./data/df_clean.parquet
+COPY --chown=appuser:appuser params.yaml ./params.yaml
 
-CMD ["gunicorn", "--workers=4", "--bind", "0.0.0.0:8000", "app.main:app"]
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Set the command to run the application using Gunicorn (the production server for Linux)
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app.main:server"]
