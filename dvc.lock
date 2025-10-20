@@ -466,7 +466,7 @@ stages:
           solver: liblinear
           penalty: l2
           C: 0.01
-          max_iter: 1000
+          max_iter: 1100
           class_weight: balanced
         mlflow:
           experiment_name: Credit Risk Prediction
@@ -486,11 +486,11 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: d5cb4402acdbc3563fed941a96eba15d
+      md5: 03eb2ea841db9a53113dae7754f527e8
       size: 740617
     - path: models/run_id.txt
       hash: md5
-      md5: da11c407139bc654356ffc7091990c98
+      md5: df76509894c909e423300dc29bf5b82e
       size: 32
   model_evaluation:
     cmd: python src/model_evaluation.py --evaluate --model_path 
@@ -503,11 +503,11 @@ stages:
       size: 62558
     - path: models/model.joblib
       hash: md5
-      md5: d5cb4402acdbc3563fed941a96eba15d
+      md5: 03eb2ea841db9a53113dae7754f527e8
       size: 740617
     - path: models/run_id.txt
       hash: md5
-      md5: da11c407139bc654356ffc7091990c98
+      md5: df76509894c909e423300dc29bf5b82e
       size: 32
     - path: src/model_evaluation.py
       hash: md5
@@ -530,20 +530,20 @@ stages:
           random_state: 42
           stratify: true
           smote_random_state: 42
-          decision_threshold: 0.6
+          decision_threshold: 0.65
           promotion_metric: f1_score
           promotion_threshold: 0.85
           label_col: default
     outs:
     - path: reports/classification_report.txt
       hash: md5
-      md5: e889d9a5752a9ae85f8af5f232920c22
+      md5: 0de977e1942b6eb08545659aa1ae2b17
       size: 334
     - path: reports/confusion_matrix.png
       hash: md5
-      md5: 4af8e4e926a5b660ce14d198c659c3c9
-      size: 18047
+      md5: 17eb157b7e6a6f8d33c0c0d6476011dd
+      size: 17984
     - path: reports/metrics.json
       hash: md5
-      md5: 7720f54d54b0dcc549c83cee680f7133
-      size: 192
+      md5: ce968e743acb1dd73964663443be2491
+      size: 191

@@ -16,7 +16,7 @@ train:
   random_state: 42
   stratify: true
   smote_random_state: 42
-  decision_threshold: 0.60
+  decision_threshold: 0.65
   promotion_metric: 'f1_score' # Metric to check for promotion
   promotion_threshold: 0.85      # Threshold for the metric
   label_col: default
@@ -39,7 +39,7 @@ logistic:
   solver: liblinear
   penalty: l2
   C: 0.01
-  max_iter: 1000
+  max_iter: 1200
   class_weight: balanced
 
 random_forest:

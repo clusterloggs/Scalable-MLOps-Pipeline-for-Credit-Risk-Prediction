@@ -9,6 +9,7 @@ import numpy as np  # Library for numerical computations
 import joblib  # For loading the trained model
 import os  # For path operations
 import yaml # To load params.yaml
+from prometheus_flask_exporter import PrometheusMetrics # For monitoring
 import dash_bootstrap_components as dbc  # Bootstrap components for styling Dash apps
 
 
@@ -55,6 +56,9 @@ loan_grade_options = [{'label': i, 'value': i} for i in sorted(df_viz['loan_grad
 # Initialize the Dash app with a Bootstrap theme (LUX in this case)
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUX])  # Create a Dash app with the LUX Bootstrap theme
 server = app.server # Expose server for WSGI
+
+# --- Monitoring Setup ---
+metrics = PrometheusMetrics(server) # This will create a /metrics endpoint
 
 
 # Layout of the app
@@ -286,16 +290,21 @@ def predict_default(n_clicks, income, emp_years, loan_amount, loan_int_rate,
             input_data = pd.DataFrame([all_inputs], columns=feature_names) 
 
             # Ensure correct data types for numerical columns
-            for col in ['income', 'emp_years', 'loan_amount', 'loan_int_rate', 'loan_percent_income', 'credit_history']:
-                input_data[col] = pd.to_numeric(input_data[col])
+            numerical_features = feature_params.get('numerical', [])
+            for col in numerical_features:
+                input_data[col] = pd.to_numeric(input_data[col], errors='coerce')
            
             # Make prediction
-            prediction = model.predict(input_data)
+            # Use predict_proba and the custom threshold from params.yaml for consistency
+            # with the model_evaluation stage.
             prediction_proba = model.predict_proba(input_data)
+            decision_threshold = params.get('train', {}).get('decision_threshold', 0.65)
+            
+            prediction = (prediction_proba[:, 1] >= decision_threshold).astype(int)
            
             # Format output
             result = "Yes" if prediction[0] == 1 else "No"  # Convert prediction to "Yes" or "No"
-            probability = f"{prediction_proba[0][1]:.2%}"  # Format probability as a percentage
+            probability = f"{prediction_proba[0][1]:.2%}"  # Format probability of the positive class (1)
            
             return html.Div([  # Return the prediction result
                 html.P(f"Will the borrower default on the loan? {result}", className="lead"),
